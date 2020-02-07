@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 
 import {MatTableDataSource} from '@angular/material/table';
 import {SelectionModel} from '@angular/cdk/collections';
@@ -10,7 +10,7 @@ export interface ProductElement {
   category: string;
 }
 
-let ELEMENT_DATA: ProductElement[] = [
+const ELEMENT_DATA: ProductElement[] = [
   { id: 1, name: 'Sandwich', category: 'Food' },
   { id: 2, name: 'Nachos', category: 'Food' },
   { id: 3, name: 'Burger', category: 'Food' },
@@ -61,6 +61,7 @@ export class AppComponent implements OnInit {
     return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.id + 1}`;
   }
 
+  // Function to view cart page with the selected items.
   showCart() {
     this.addCart = false;
     this.backCart = true;
@@ -68,19 +69,20 @@ export class AppComponent implements OnInit {
     this.dataSource = new MatTableDataSource<ProductElement>(this.selection.selected);
   }
 
+  // Function to go back to the listing/main page of the application.
   backToCart() {
     this.addCart = true;
     this.backCart = false;
     this.selection.clear();
     this.cartLength = null;
+    this.myForm.controls.name.setValue('');
+    this.myForm.controls.category.setValue('');
     this.displayedColumns = ['select', 'id', 'name', 'category'];
     this.dataSource = new MatTableDataSource<ProductElement>(ELEMENT_DATA);
   }
 
-
+  // Function to add selected items into the cart.
   addToCart(): void {
-    console.log(this.selection);
-    console.log(this.selection.selected.length);
     if (this.selection.selected.length > 0 ) {
       this.cartLength = this.selection.selected.length;
     }
@@ -88,11 +90,12 @@ export class AppComponent implements OnInit {
 
   ngOnInit() {
     this.myForm = new FormGroup({
-      name: new FormControl(''),
-      category: new FormControl('')
+      name: new FormControl('', Validators.required),
+      category: new FormControl('', Validators.required)
     });
   }
 
+  // Function to add new items into the cart along with the different categories.
   onSubmit(form: FormGroup) {
     ELEMENT_DATA.push({id: ELEMENT_DATA.length + 1,  name: form.value.name, category: form.value.category});
     this.dataSource = new MatTableDataSource<ProductElement>(ELEMENT_DATA);

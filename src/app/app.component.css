@@ -2,3 +2,13 @@ table {
     width: 95%;
     margin-left: 20px;
 }
+
+
+/* ::ng-deep.mat-form-field-appearance-fill .mat-form-field-flex {
+    background-color: white;
+} */
+
+.mat-badge-medium.mat-badge-after .mat-badge-content {
+    right: -14px;
+    top: -16px;
+}

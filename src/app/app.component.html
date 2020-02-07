@@ -4,8 +4,8 @@
             <h2> PRODUCTS LIST DISPLAY</h2>
         </div>
         <div fxFlex="10" fxLayoutAlign="center end" style="margin-right: 20px">
-            <div [matBadge]=cartLength matBadgeOverlap="false" (click)="showCart()">
-                <h2 style="margin-top: 5px;">CART</h2>
+            <div style="cursor: pointer;" [matBadge]=cartLength matBadgeOverlap="false" (click)="showCart()">
+                <mat-icon>add_shopping_cart</mat-icon>
             </div>
         </div>
     </div>
@@ -13,14 +13,21 @@
         <h3>ADD NEW PRODUCT:</h3>
         <div style="margin-left: 10px;">
             <form [formGroup]="myForm" (ngSubmit)="onSubmit(myForm)">
-                <input style="height: 30px; margin:5px;" formControlName="name" placeholder="Enter name">
-                <input style="height: 30px; margin:5px;" formControlName="category" placeholder="Enter Category">
-                <button mat-raised-button color="primary" style="margin:5px;" type="submit">ADD</button>
+                <mat-form-field style="margin:5px;">
+                    <input matInput formControlName="name" placeholder="Enter Product name">
+                </mat-form-field>
+                <mat-form-field style="margin:5px;">
+                    <mat-label>Select Category</mat-label>
+                    <mat-select formControlName="category">
+                        <mat-option value="Food">Food</mat-option>
+                        <mat-option value="Drinks">Drinks</mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <button mat-raised-button color="primary" style="margin:5px;" type="submit" [disabled]="myForm.invalid">ADD</button>
             </form>
         </div>
     </div>
 </div>
-
 <div>
     <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
         <!-- Checkbox Column -->
@@ -37,19 +44,19 @@
 
         <!-- ID Column -->
         <ng-container matColumnDef="id">
-            <th mat-header-cell *matHeaderCellDef> No. </th>
+            <th mat-header-cell *matHeaderCellDef> NO. </th>
             <td mat-cell *matCellDef="let element"> {{element.id}} </td>
         </ng-container>
 
         <!-- Name Column -->
         <ng-container matColumnDef="name">
-            <th mat-header-cell *matHeaderCellDef> Name </th>
+            <th mat-header-cell *matHeaderCellDef> NAME </th>
             <td mat-cell *matCellDef="let element"> {{element.name}} </td>
         </ng-container>
 
         <!-- category Column -->
         <ng-container matColumnDef="category">
-            <th mat-header-cell *matHeaderCellDef> category </th>
+            <th mat-header-cell *matHeaderCellDef> CATEGORY </th>
             <td mat-cell *matCellDef="let element"> {{element.category}} </td>
         </ng-container>
 
@@ -57,6 +64,6 @@
         <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="selection.toggle(row)">
         </tr>
     </table>
-    <button style="margin: 20px;" (click)="addToCart()" mat-raised-button color="primary" *ngIf="addCart">ADD TO CART</button>
+    <button style="margin: 20px;" (click)="addToCart()" mat-raised-button color="primary" *ngIf="addCart" [disabled]="this.selection.selected.length === 0">ADD TO CART</button>
     <button style="margin: 20px;" (click)="backToCart()" mat-raised-button color="primary" *ngIf="backCart">BACK TO CART</button>
 </div>
